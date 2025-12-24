@@ -9,5 +9,3 @@ type Interface interface {
 	ShutDownWithDrain()
 	ShuttingDown() bool
 }
-
-

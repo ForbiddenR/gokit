@@ -30,7 +30,6 @@ func (stream *sliceStream[T]) Uniq() *sliceStream[T] {
 	return stream
 }
 
-func (stream *sliceStream[T]) Result() []T  {
-	return stream.in	
+func (stream *sliceStream[T]) Result() []T {
+	return stream.in
 }
-
