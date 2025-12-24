@@ -3,12 +3,10 @@ module github.com/Kotodian/gokit
 go 1.23
 
 require (
-	github.com/FZambia/sentinel v1.1.1
 	github.com/Kotodian/protocol v1.10.47
 	github.com/bytedance/gopkg v0.0.0-20230512060433-7f5f1dee0b1e
 	github.com/eclipse/paho.mqtt.golang v1.4.2
 	github.com/golang/protobuf v1.5.3
-	github.com/gomodule/redigo v1.8.9
 	github.com/gorilla/websocket v1.5.0
 	github.com/influxdata/influxdb-client-go/v2 v2.12.3
 	github.com/json-iterator/go v1.1.12
@@ -18,9 +16,9 @@ require (
 	github.com/rabbitmq/amqp091-go v1.5.0
 	github.com/redis/go-redis/v9 v9.0.4
 	github.com/silenceper/pool v1.0.0
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.11.1
 	github.com/thinkgos/go-iecp5 v1.2.1
-	github.com/tidwall/gjson v1.14.4
+	github.com/tidwall/gjson v1.18.0
 	github.com/valyala/bytebufferpool v1.0.0
 	github.com/valyala/fasthttp v1.47.0
 	github.com/yitter/idgenerator-go v1.3.3
