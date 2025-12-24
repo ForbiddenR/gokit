@@ -253,10 +253,8 @@ func TestWithCancel(t *testing.T) {
 	})
 	var doneErr error
 	g.Go(func(ctx context.Context) error {
-		select {
-		case <-ctx.Done():
-			doneErr = ctx.Err()
-		}
+		<-ctx.Done()
+		doneErr = ctx.Err()
 		return doneErr
 	})
 	g.Wait()

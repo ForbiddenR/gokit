@@ -232,7 +232,7 @@ func (c *Client) SubMQTT() {
 				}
 				ctx := context.WithValue(context.TODO(), "client", c)
 				ctx = context.WithValue(ctx, "trData", trData)
-				var msg interface{}
+				var msg any
 
 				var err error
 				defer func() {
@@ -271,7 +271,6 @@ func (c *Client) SubMQTT() {
 				} else {
 					c.Reply(ctx, msg)
 				}
-				return
 			}()
 
 			// wp.PushTask(workpool.Task{

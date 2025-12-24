@@ -6,7 +6,6 @@ require (
 	github.com/FZambia/sentinel v1.1.1
 	github.com/Kotodian/protocol v1.10.47
 	github.com/bytedance/gopkg v0.0.0-20230512060433-7f5f1dee0b1e
-	github.com/didi/gendry v1.8.0
 	github.com/eclipse/paho.mqtt.golang v1.4.2
 	github.com/golang/protobuf v1.5.3
 	github.com/gomodule/redigo v1.8.9
@@ -29,8 +28,6 @@ require (
 	go.uber.org/zap v1.24.0
 	golang.org/x/crypto v0.9.0
 	golang.org/x/net v0.10.0
-	gorm.io/driver/mysql v1.5.0
-	gorm.io/gorm v1.25.1
 )
 
 require (
@@ -39,11 +36,8 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/deepmap/oapi-codegen v1.8.2 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/influxdata/line-protocol v0.0.0-20200327222509-2487e7298839 // indirect
-	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.16.3 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect

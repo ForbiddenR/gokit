@@ -96,7 +96,7 @@ func (p *Pool) GetContext(ctx context.Context) (net.Conn, error) {
 		pc := p.idle.front
 		p.idle.popFront()
 		p.mu.Unlock()
-		if p.MaxConnLifeTime == 0 || time.Now().Sub(pc.created) < p.MaxConnLifeTime {
+		if p.MaxConnLifeTime == 0 || time.Since(pc.created) < p.MaxConnLifeTime {
 			return &activeConn{p: p, pc: pc}, nil
 		}
 		pc.c.Close()
