@@ -85,7 +85,7 @@ func (b *Builder) Build() string {
 	res += fmt.Sprintf(" %s %s(%s:%s", pipeForward, r, start, b.r.start)
 	// |> range(start:-1h)
 	if b.r.end == "" {
-		res += fmt.Sprintf(")")
+		res += ")"
 	} else {
 		// |> range(start:-1h,end:-5m)
 		res += fmt.Sprintf(", %s:%s)", end, b.r.end)
@@ -104,6 +104,6 @@ func (b *Builder) Build() string {
 			res += " and"
 		}
 	}
-	res += fmt.Sprintf(" )")
+	res += " )"
 	return res
 }

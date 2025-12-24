@@ -30,14 +30,13 @@ func SubCH(ctx context.Context, name string, out interface{}, timeout time.Durat
 			default:
 			}
 			resp := psc.ReceiveWithTimeout(timeout)
-			switch resp.(type) {
+			switch resp := resp.(type) {
 			case redis.Message: //单个订阅subscribe
-				return json.Unmarshal(resp.(redis.Message).Data, out)
+				return json.Unmarshal(resp.Data, out)
 			case error:
-				return resp.(error)
+				return resp
 			}
 		}
-		return nil
 	})
 	return g.Wait()
 }
