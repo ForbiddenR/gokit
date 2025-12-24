@@ -41,4 +41,3 @@ func newItem[K comparable, V any](key K, val V, opts ...ItemOption) *Item[K, V] 
 		Expiration: o.expiration,
 	}
 }
-

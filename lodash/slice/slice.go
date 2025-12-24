@@ -52,7 +52,7 @@ func Reduce[T any, R any](collection []T, accumulator func(R, T, int) R, initial
 	return initial
 }
 
-func ForEach[T any](collection []T, iteratee func(T, int))  {
+func ForEach[T any](collection []T, iteratee func(T, int)) {
 	for i, item := range collection {
 		iteratee(item, i)
 	}
@@ -235,7 +235,7 @@ func DropRight[T any](collection []T, n int) []T {
 		return make([]T, 0)
 	}
 	result := make([]T, len(collection)-n)
-	for i := len(collection)-1-n; i != 0; i-- {
+	for i := len(collection) - 1 - n; i != 0; i-- {
 		result[i] = collection[i]
 	}
 	return nil
