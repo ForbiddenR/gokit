@@ -93,7 +93,7 @@ func IndexExists(ctx context.Context, index string) (bool, error) {
 	return exists, nil
 }
 
-func Insert(ctx context.Context, id, index string, body interface{}) error {
+func Insert(ctx context.Context, id, index string, body any) error {
 	indexService := client.Index().Index(index).BodyJson(body)
 	if id != "" {
 		indexService.Id(id)
@@ -106,7 +106,7 @@ func Insert(ctx context.Context, id, index string, body interface{}) error {
 	return err
 }
 
-func InsertBulk(ctx context.Context, index string, body []interface{}) error {
+func InsertBulk(ctx context.Context, index string, body []any) error {
 	request := client.Bulk()
 	for _, v := range body {
 		tmp := v
@@ -117,7 +117,7 @@ func InsertBulk(ctx context.Context, index string, body []interface{}) error {
 	return err
 }
 
-func Update(ctx context.Context, index string, id string, fields map[string]interface{}, defaultValue ...map[string]interface{}) error {
+func Update(ctx context.Context, index string, id string, fields map[string]any, defaultValue ...map[string]any) error {
 	up := client.Update().Index(index).Id(id).Doc(fields)
 	if len(defaultValue) > 0 {
 		up.Upsert(defaultValue[0])
@@ -161,7 +161,7 @@ func copyMap(m map[string]string) map[string]string {
 	return cp
 }
 
-func UpdateByQuery(ctx context.Context, index string, params, query map[string]interface{}) error {
+func UpdateByQuery(ctx context.Context, index string, params, query map[string]any) error {
 	script := buildScript(params)
 	updateByQueryService := client.UpdateByQuery(index).Script(elastic.NewScript(script).Params(params))
 	for k, v := range query {
@@ -189,7 +189,7 @@ func DocExist(ctx context.Context, index string, id string) (bool, error) {
 const scriptPrefix = "ctx._source."
 const paramPrefix = "params."
 
-func buildScript(params map[string]interface{}) string {
+func buildScript(params map[string]any) string {
 	var script string
 	for k, _ := range params {
 		script += scriptPrefix + k + "=" + paramPrefix + k + ";"

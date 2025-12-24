@@ -66,9 +66,9 @@ func Init() {
 	rdb = redis.NewUniversalClient(&opts)
 }
 
-type SetFunc func(key string, val interface{}, keepalive int64)
+type SetFunc func(key string, val any, keepalive int64)
 
-func wrapSetFunc(key string, val interface{}, keepalive int64) retry.Action {
+func wrapSetFunc(key string, val any, keepalive int64) retry.Action {
 	return func(attempt uint) error {
 		var err error
 		ctx := context.Background()
@@ -81,22 +81,22 @@ func wrapSetFunc(key string, val interface{}, keepalive int64) retry.Action {
 	}
 }
 
-func RetrySet(key string, val interface{}, keepalive int64) error {
+func RetrySet(key string, val any, keepalive int64) error {
 	return retry.Retry(wrapSetFunc(key, val, keepalive), strategy.Limit(3))
 }
 
-func wrapHSetFunc(redisConn redis.Conn, key string, field string, val interface{}) retry.Action {
+func wrapHSetFunc(redisConn redis.Conn, key string, field string, val any) retry.Action {
 	return func(attempt uint) error {
 		err := redisConn.HSet(context.Background(), key, field, val).Err()
 		return err
 	}
 }
 
-func RetryHSet(redisConn redis.Conn, key string, field string, val interface{}) error {
+func RetryHSet(redisConn redis.Conn, key string, field string, val any) error {
 	return retry.Retry(wrapHSetFunc(redisConn, key, field, val))
 }
 
-func HGet(ctx context.Context, key string, field string, val interface{}) error {
+func HGet(ctx context.Context, key string, field string, val any) error {
 	body, err := rdb.HGet(ctx, key, field).Bytes()
 	if err != nil {
 		return err

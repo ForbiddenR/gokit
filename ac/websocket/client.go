@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -16,8 +15,6 @@ import (
 	"github.com/Kotodian/gokit/datasource"
 	"github.com/Kotodian/gokit/datasource/mqtt"
 	"github.com/Kotodian/gokit/datasource/rabbitmq"
-	"github.com/Kotodian/gokit/datasource/redis"
-	"github.com/Kotodian/protocol/golang/keys"
 	"github.com/valyala/bytebufferpool"
 	"go.uber.org/zap"
 
@@ -77,11 +74,11 @@ func (c *Client) SetMessageNumber(i int16) {
 	return
 }
 
-func (c *Client) SetData(key, val interface{}) {
+func (c *Client) SetData(key, val any) {
 	return
 }
 
-func (c *Client) GetData(key interface{}) interface{} {
+func (c *Client) GetData(key any) any {
 	return nil
 }
 
@@ -155,7 +152,7 @@ func NewClient(chargeStation interfaces.ChargeStation, hub *lib.Hub, conn *webso
 	}
 }
 
-//SubRegMQTT 监听MQTT的注册报文回复信息
+// SubRegMQTT 监听MQTT的注册报文回复信息
 func (c *Client) SubRegMQTT() {
 	c.hub.RegClients.Store(c.chargeStation.CoreID(), c)
 	//if c.Evse.CoreID() == 0 {
@@ -185,7 +182,7 @@ func (c *Client) SubRegMQTT() {
 				ctx := context.WithValue(context.TODO(), "client", c)
 				ctx = context.WithValue(ctx, "trData", trData)
 
-				var msg interface{}
+				var msg any
 				//var f lib.FromAPDUFunc
 				if msg, err = c.hub.TR.FromAPDU(ctx, &apdu); err != nil {
 					err = fmt.Errorf("FromAPDU register error, err:%s topic:%s", err.Error(), topic)
@@ -212,7 +209,7 @@ func (c *Client) SubRegMQTT() {
 	}
 }
 
-//SubMQTT 监听MQTT非注册的一般信息
+// SubMQTT 监听MQTT非注册的一般信息
 func (c *Client) SubMQTT() {
 	c.hub.Clients.Store(c.chargeStation.CoreID(), c)
 	// wp := workpool.New(1, 5).Start()
@@ -237,7 +234,7 @@ func (c *Client) SubMQTT() {
 				}
 				ctx := context.WithValue(context.TODO(), "client", c)
 				ctx = context.WithValue(ctx, "trData", trData)
-				var msg interface{}
+				var msg any
 
 				var err error
 				defer func() {
@@ -287,7 +284,7 @@ func (c *Client) SubMQTT() {
 				}
 			}()
 			// wp.PushTask(workpool.Task{
-			// 	F: func(w *workpool.WorkPool, args ...interface{}) (flag workpool.Flag) {
+			// 	F: func(w *workpool.WorkPool, args ...any) (flag workpool.Flag) {
 			// 		flag = workpool.FLAG_OK
 			// 		topic := m.Topic
 
@@ -298,7 +295,7 @@ func (c *Client) SubMQTT() {
 			// 		}
 			// 		ctx := context.WithValue(context.TODO(), "client", c)
 			// 		ctx = context.WithValue(ctx, "trData", trData)
-			// 		var msg interface{}
+			// 		var msg any
 
 			// 		var err error
 			// 		defer func() {
@@ -347,7 +344,7 @@ func (c *Client) SubMQTT() {
 			// 			return
 			// 		}
 			// 		return
-			// 	}, Args: []interface{}{apdu},
+			// 	}, Args: []any{apdu},
 			// })
 		}
 	}
@@ -395,7 +392,7 @@ func (c *Client) ReadPump() {
 			break
 		}
 		buffer := bytebufferpool.Get()
-		_, err = buffer.ReadFrom(r)	
+		_, err = buffer.ReadFrom(r)
 		if err != nil {
 			bytebufferpool.Put(buffer)
 			break
@@ -477,7 +474,7 @@ func (c *Client) ReadPump() {
 	}
 }
 
-func (c *Client) Reply(ctx context.Context, payload interface{}) {
+func (c *Client) Reply(ctx context.Context, payload any) {
 	resp, err := c.hub.ResponseFn(ctx, payload)
 	if err != nil {
 		return
@@ -634,12 +631,12 @@ func (c *Client) PingHandler(msg string) error {
 	} else if e, ok := err.(net.Error); ok && e.Temporary() {
 		return nil
 	}
-	redisConn := redis.GetRedis()
-	defer redisConn.Close()
-	_, err = redisConn.Do("expire", keys.Equipment(strconv.FormatUint(c.chargeStation.CoreID(), 10)), 190)
-	if err != nil {
-		c.log.Error(err.Error(), zap.String("sn", c.chargeStation.SN()))
-	}
+	// redisConn := redis.GetRedis()
+	// defer redisConn.Close()
+	// _, err = redisConn.Do("expire", keys.Equipment(strconv.FormatUint(c.chargeStation.CoreID(), 10)), 190)
+	// if err != nil {
+	// 	c.log.Error(err.Error(), zap.String("sn", c.chargeStation.SN()))
+	// }
 	return nil
 }
 

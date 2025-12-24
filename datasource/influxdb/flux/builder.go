@@ -50,7 +50,7 @@ type duration struct {
 type filter struct {
 	field string
 	op    Operator
-	value interface{}
+	value any
 	vType reflect.Type
 }
 
@@ -68,7 +68,7 @@ func (b *Builder) Range(start string, end string) *Builder {
 	return b
 }
 
-func (b *Builder) AddFilter(field string, op Operator, value interface{}) *Builder {
+func (b *Builder) AddFilter(field string, op Operator, value any) *Builder {
 	b.f = append(b.f, filter{
 		field: field,
 		op:    op,

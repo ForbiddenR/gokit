@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -16,9 +15,7 @@ import (
 	"github.com/Kotodian/gokit/datasource"
 	"github.com/Kotodian/gokit/datasource/mqtt"
 	"github.com/Kotodian/gokit/datasource/rabbitmq"
-	"github.com/Kotodian/gokit/datasource/redis"
 	"github.com/Kotodian/protocol/golang/hardware/charger"
-	"github.com/Kotodian/protocol/golang/keys"
 	"github.com/Kotodian/protocol/interfaces"
 	"github.com/bytedance/gopkg/lang/mcache"
 	"github.com/golang/protobuf/proto"
@@ -161,7 +158,7 @@ func (c *Client) SubRegMQTT() {
 				ctx := context.WithValue(context.TODO(), "client", c)
 				ctx = context.WithValue(ctx, "trData", trData)
 
-				var msg interface{}
+				var msg any
 
 				// 处理并翻译成桩端需要的结果
 				if msg, err = c.hub.TR.FromAPDU(ctx, &apdu); err != nil {
@@ -184,7 +181,7 @@ func (c *Client) SubRegMQTT() {
 	}
 }
 
-func (c *Client) Reply(ctx context.Context, payload interface{}) {
+func (c *Client) Reply(ctx context.Context, payload any) {
 	resp, err := c.hub.ResponseFn(ctx, payload)
 	if err != nil {
 		return
@@ -192,7 +189,7 @@ func (c *Client) Reply(ctx context.Context, payload interface{}) {
 	_ = c.Send(resp)
 }
 
-func (c *Client) sendCommand(ctx context.Context, payload interface{}) {
+func (c *Client) sendCommand(ctx context.Context, payload any) {
 	command, err := c.hub.CommandFn(ctx, payload)
 	if err != nil {
 		return
@@ -274,7 +271,7 @@ func (c *Client) SubMQTT() {
 			}()
 
 			// wp.PushTask(workpool.Task{
-			// 	F: func(w *workpool.WorkPool, args ...interface{}) (flag workpool.Flag) {
+			// 	F: func(w *workpool.WorkPool, args ...any) (flag workpool.Flag) {
 			// 		flag = workpool.FLAG_OK
 			// 		topic := m.Topic
 
@@ -285,7 +282,7 @@ func (c *Client) SubMQTT() {
 			// 		}
 			// 		ctx := context.WithValue(context.TODO(), "client", c)
 			// 		ctx = context.WithValue(ctx, "trData", trData)
-			// 		var msg interface{}
+			// 		var msg any
 
 			// 		var err error
 			// 		defer func() {
@@ -325,7 +322,7 @@ func (c *Client) SubMQTT() {
 			// 			c.Reply(ctx, msg)
 			// 		}
 			// 		return
-			// 	}, Args: []interface{}{apdu},
+			// 	}, Args: []any{apdu},
 			// })
 		}
 	}
@@ -532,12 +529,12 @@ func (c *Client) EncryptKey() []byte {
 }
 
 func (c *Client) PingHandler(msg string) error {
-	redisConn := redis.GetRedis()
-	defer redisConn.Close()
-	_, err := redisConn.Do("expire", keys.Equipment(strconv.FormatUint(c.chargeStation.CoreID(), 10)), 190)
-	if err != nil {
-		c.log.Error(err.Error(), zap.String("sn", c.chargeStation.SN()))
-	}
+	// redisConn := redis.GetRedis()
+	// defer redisConn.Close()
+	// _, err := redisConn.Do("expire", keys.Equipment(strconv.FormatUint(c.chargeStation.CoreID(), 10)), 190)
+	// if err != nil {
+	// 	c.log.Error(err.Error(), zap.String("sn", c.chargeStation.SN()))
+	// }
 	return nil
 }
 
@@ -557,7 +554,7 @@ func (c *Client) GetMessageNumber() int16 {
 	return c.messageNumber
 }
 
-func (c *Client) SetData(key, value interface{}) {
+func (c *Client) SetData(key, value any) {
 	if value == nil {
 		c.data.Delete(key)
 	} else {
@@ -565,7 +562,7 @@ func (c *Client) SetData(key, value interface{}) {
 	}
 }
 
-func (c *Client) GetData(key interface{}) interface{} {
+func (c *Client) GetData(key any) any {
 	if value, ok := c.data.Load(key); ok {
 		return value
 	}

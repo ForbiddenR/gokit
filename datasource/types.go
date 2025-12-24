@@ -8,20 +8,21 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/golang/protobuf/proto"
-	"github.com/tidwall/gjson"
-	"golang.org/x/crypto/bcrypt"
 	"html/template"
 	"reflect"
 	"strconv"
+
+	"github.com/golang/protobuf/proto"
+	"github.com/tidwall/gjson"
+	"golang.org/x/crypto/bcrypt"
 )
 
-func JsonValue(l interface{}) (driver.Value, error) {
+func JsonValue(l any) (driver.Value, error) {
 	bytes, err := json.Marshal(l)
 	return string(bytes), err
 }
 
-func JsonScan(input interface{}, l interface{}) (err error) {
+func JsonScan(input any, l any) (err error) {
 	switch value := input.(type) {
 	case string:
 		if value == "" {
@@ -69,7 +70,7 @@ func (c KindPassword) IsMatch(s string) (bool, error) {
 // 	return int64(float64(c) * 100), nil
 // }
 
-// func (c *KindPrice) Scan(input interface{}) error {
+// func (c *KindPrice) Scan(input any) error {
 // 	fmt.Println("---------->kp s", *c)
 
 // 	switch input.(type) {
@@ -203,7 +204,7 @@ func (c *KindProtocolObj) Value() (driver.Value, error) {
 	return c.Type + "|" + string(c.Bytes), nil
 }
 
-func (c *KindProtocolObj) Scan(input interface{}) error {
+func (c *KindProtocolObj) Scan(input any) error {
 	*c = KindProtocolObj{
 		Bytes: input.([]byte),
 	}
@@ -235,7 +236,7 @@ func (c KindCoordinate) Value() (driver.Value, error) {
 	return int64(float64(c) * 1000000), nil
 }
 
-func (c *KindCoordinate) Scan(input interface{}) error {
+func (c *KindCoordinate) Scan(input any) error {
 	switch input.(type) {
 	case int64:
 		*c = KindCoordinate(input.(int64)) / 1000000
@@ -251,7 +252,7 @@ func (c *KindCoordinate) Scan(input interface{}) error {
 	return nil
 }
 
-func NewUUID(id interface{}) (ret *UUID) {
+func NewUUID(id any) (ret *UUID) {
 	var _id UUID
 	switch id.(type) {
 	case int:

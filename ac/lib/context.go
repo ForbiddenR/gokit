@@ -9,7 +9,7 @@ func GetClientFromCtx(ctx context.Context) ClientInterface {
 func GetTRDataFromCtx(ctx context.Context) *TRData {
 	data := ctx.Value("trData").(*TRData)
 	if data.Data == nil {
-		data.Data = make(map[string]interface{})
+		data.Data = make(map[string]any)
 	}
 	return data
 }

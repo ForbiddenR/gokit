@@ -36,7 +36,7 @@ func Init() {
 
 func Publish(ctx context.Context,
 	key string,
-	headers map[string]interface{}, body interface{}) error {
+	headers map[string]any, body any) error {
 	bytes, err := json.Marshal(body)
 	if err != nil {
 		return err
@@ -53,7 +53,7 @@ func Publish(ctx context.Context,
 }
 
 func PublishJSON(ctx context.Context,
-	key string, headers map[string]interface{}, body []byte) error {
+	key string, headers map[string]any, body []byte) error {
 	return P.Publish(publisher.Message{
 		Context: ctx,
 		Key:     key,
@@ -65,7 +65,7 @@ func PublishJSON(ctx context.Context,
 	})
 }
 
-func Consume(ctx context.Context, queue string, handler func(ctx context.Context, msg amqp091.Delivery) interface{}) error {
+func Consume(ctx context.Context, queue string, handler func(ctx context.Context, msg amqp091.Delivery) any) error {
 	h := consumer.HandlerFunc(handler)
 	_, err := dialer.Consumer(
 		consumer.WithContext(ctx),

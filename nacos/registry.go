@@ -15,7 +15,7 @@ package nacos
 // }
 
 // func CreateConfigClient(timeout uint64, namespaceId, username, password string, urls ...url.URL) (config_client.IConfigClient, error) {
-// 	c, err := clients.CreateConfigClient(map[string]interface{}{
+// 	c, err := clients.CreateConfigClient(map[string]any{
 // 		"serverConfigs": CreateServerConfig(urls...),
 // 		"clientConfig":  CreateClientConifg(timeout, namespaceId, username, password),
 // 	})
@@ -23,7 +23,7 @@ package nacos
 // }
 
 // func CreateNamingClient(timeout uint64, namespaceId, username, password string, urls ...url.URL) (naming_client.INamingClient, error) {
-// 	c, err := clients.CreateNamingClient(map[string]interface{}{
+// 	c, err := clients.CreateNamingClient(map[string]any{
 // 		"serverConfigs": CreateServerConfig(urls...),
 // 		"clientConfig":  CreateClientConifg(timeout, namespaceId, username, password),
 // 	})

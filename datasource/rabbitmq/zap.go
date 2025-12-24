@@ -18,10 +18,10 @@ type rabbitmqHook struct {
 	queue    string
 	service  string
 	version  string
-	ignore   func(map[string]interface{}) bool
+	ignore   func(map[string]any) bool
 }
 
-func NewRabbitmqHook(queue string, service string, version string, ignore func(map[string]interface{}) bool) *rabbitmqHook {
+func NewRabbitmqHook(queue string, service string, version string, ignore func(map[string]any) bool) *rabbitmqHook {
 	hostName, _ := os.Hostname()
 	hook := &rabbitmqHook{
 		queue:    queue,
@@ -45,12 +45,12 @@ func (r *rabbitmqHook) Write(p []byte) (n int, err error) {
 func (r *rabbitmqHook) push(data []byte) (err error) {
 	ctx := context.Background()
 	now := time.Now()
-	var object interface{}
+	var object any
 	if err = jsoniter.Unmarshal(data, &object); err != nil {
 		return err
 	}
 
-	dataMap := object.(map[string]interface{})
+	dataMap := object.(map[string]any)
 	if r.ignore != nil && r.ignore(dataMap) {
 		return nil
 	}
@@ -95,12 +95,12 @@ type Options struct {
 	MaxBackups    int    // MaxBackups是要保留的最大旧日志文件数
 	MaxAge        int    // MaxAge是根据日期保留旧日志文件的最大天数
 	Queue         string // rabbitmq queue
-	IgnoreFunc    func(map[string]interface{}) bool
+	IgnoreFunc    func(map[string]any) bool
 	Index         string // elasticsearch index
 	zap.Config
 }
 
-func NewZapLogger(minLevel zapcore.Level, version, queue, service string, ignore ...func(map[string]interface{}) bool) *zap.Logger {
+func NewZapLogger(minLevel zapcore.Level, version, queue, service string, ignore ...func(map[string]any) bool) *zap.Logger {
 	writeSyncerList := make([]zapcore.WriteSyncer, 0)
 	coreList := make([]zapcore.Core, 0)
 

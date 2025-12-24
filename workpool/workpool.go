@@ -14,11 +14,11 @@ const (
 	FLAG_RETRY Flag = 1 << iota
 )
 
-type TaskFunc func(w *WorkPool, args ...interface{}) Flag
+type TaskFunc func(w *WorkPool, args ...any) Flag
 
 type Task struct {
 	F    TaskFunc
-	Args []interface{}
+	Args []any
 }
 
 type WorkPool struct {
@@ -53,7 +53,7 @@ func (w *WorkPool) PushTask(t Task) {
 	w.pool <- t
 }
 
-func (w *WorkPool) PushTaskFunc(f TaskFunc, args ...interface{}) {
+func (w *WorkPool) PushTaskFunc(f TaskFunc, args ...any) {
 	w.pool <- Task{
 		F:    f,
 		Args: args,

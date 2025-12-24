@@ -50,7 +50,7 @@ func Init() {
 	}
 }
 
-func sendRequest(url string, protocol interface{}, header map[string]string) ([]byte, error) {
+func sendRequest(url string, protocol any, header map[string]string) ([]byte, error) {
 	reqEntityBytes, err := json.Marshal(protocol)
 	if err != nil {
 		return nil, err

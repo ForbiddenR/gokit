@@ -34,9 +34,9 @@ type Hub struct {
 	TR ITranslate //协议翻译器
 
 	// CommandFn 发送函数
-	CommandFn func(ctx context.Context, payload interface{}) ([]byte, error)
+	CommandFn func(ctx context.Context, payload any) ([]byte, error)
 	// ResponseFn 返回函数
-	ResponseFn func(ctx context.Context, payload interface{}) ([]byte, error)
+	ResponseFn func(ctx context.Context, payload any) ([]byte, error)
 
 	// ResponseErrFn 返回错误的参数
 	ResponseErrFn func(ctx context.Context, err error, desc ...string) []byte
@@ -87,7 +87,7 @@ func (h *Hub) SetEncrypt(encrypt Encrypt) {
 	h.Encrypt = encrypt
 }
 
-func (h *Hub) SendMsgToDevice(evse interface{}, msg []byte) error {
+func (h *Hub) SendMsgToDevice(evse any, msg []byte) error {
 	if c, ok := h.Clients.Load(evse); ok {
 		return c.(ClientInterface).Send(msg)
 	}
@@ -95,7 +95,7 @@ func (h *Hub) SendMsgToDevice(evse interface{}, msg []byte) error {
 }
 
 // CloseClient 断开连接
-func (h *Hub) CloseClient(evse interface{}) {
+func (h *Hub) CloseClient(evse any) {
 	h.Clients.Delete(evse)
 }
 
@@ -193,7 +193,7 @@ func (h *Hub) Run() {
 			case <-ctx.Done():
 				return nil
 			case m := <-h.PubMqttMsg:
-				wp.PushTaskFunc(func(w *workpool.WorkPool, args ...interface{}) workpool.Flag {
+				wp.PushTaskFunc(func(w *workpool.WorkPool, args ...any) workpool.Flag {
 					token := h.MqttClient.GetMQTT().Publish(
 						m.Topic,
 						m.Qos,

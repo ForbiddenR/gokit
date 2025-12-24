@@ -7,13 +7,13 @@ import (
 
 var mapchs sync.Map
 
-func NewCH(name string, nums ...int) (chan interface{}, bool) {
+func NewCH(name string, nums ...int) (chan any, bool) {
 	num := 1
 	if len(nums) > 0 {
 		num = nums[0]
 	}
-	ch, loaded := mapchs.LoadOrStore(name, make(chan interface{}, num))
-	return ch.(chan interface{}), loaded
+	ch, loaded := mapchs.LoadOrStore(name, make(chan any, num))
+	return ch.(chan any), loaded
 
 }
 
@@ -22,7 +22,7 @@ func IsExists(name string) (ok bool) {
 	return
 }
 
-func SetCH(name string, s interface{}) (err error) {
+func SetCH(name string, s any) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("set ch error:[%v]", r)
@@ -35,7 +35,7 @@ func SetCH(name string, s interface{}) (err error) {
 	}
 
 	select {
-	case ch.(chan interface{}) <- s:
+	case ch.(chan any) <- s:
 		return nil
 	}
 }
@@ -45,7 +45,7 @@ func DeleteCH(names ...string) {
 		mapchs.Delete(name)
 	}
 }
-func CloseCH(chs ...chan interface{}) {
+func CloseCH(chs ...chan any) {
 	for _, ch := range chs {
 		if !IsColseCH(ch) {
 			close(ch)
@@ -53,7 +53,7 @@ func CloseCH(chs ...chan interface{}) {
 	}
 }
 
-func IsColseCH(ch <-chan interface{}) bool {
+func IsColseCH(ch <-chan any) bool {
 	select {
 	case <-ch:
 		return true

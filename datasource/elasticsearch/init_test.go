@@ -18,12 +18,12 @@ func TestIndexCreate(t *testing.T) {
 
 func TestUpdateByQuery(t *testing.T) {
 	//script := `ctx._source.lastLostConnReason=params.lastLostConnReason;ctx._source.lastLostConnTime=params.lastLostConnTime;ctx._source.state=params.state`
-	params := map[string]interface{}{
+	params := map[string]any{
 		"lastLostConnReason": "websocket断开",
 		"lastLostConnTime":   time.Now().Format("2006-01-02 15:04:05"),
 		"state":              false,
 	}
-	err := UpdateByQuery(context.Background(), "equipment", params, map[string]interface{}{
+	err := UpdateByQuery(context.Background(), "equipment", params, map[string]any{
 		"accessPod": "jx-ac-ocpp-cluster-0",
 	})
 	if err != nil {

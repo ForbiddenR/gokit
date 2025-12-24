@@ -49,11 +49,11 @@ func GetClient() (influxdb.Client, error) {
 	return c.(influxdb.Client), nil
 }
 
-func CloseClient(v interface{}) error {
+func CloseClient(v any) error {
 	return _pool.Put(v)
 }
 
-func WriteAPIBlocking(bucket, measurement string, tags map[string]string, fields map[string]interface{}, ts time.Time) error {
+func WriteAPIBlocking(bucket, measurement string, tags map[string]string, fields map[string]any, ts time.Time) error {
 	writeAPI := client.WriteAPIBlocking(org, bucket)
 	p := influxdb.NewPoint(measurement, tags, fields, ts)
 	err := writeAPI.WritePoint(context.Background(), p)
@@ -69,7 +69,7 @@ func Query(query string) (*api.QueryTableResult, error) {
 	return result, nil
 }
 
-func WriteAPI(bucket, measurement string, tags map[string]string, fields map[string]interface{}, ts time.Time) {
+func WriteAPI(bucket, measurement string, tags map[string]string, fields map[string]any, ts time.Time) {
 	writeAPI := client.WriteAPI(org, bucket)
 	p := influxdb.NewPoint(measurement, tags, fields, ts)
 	writeAPI.WritePoint(p)

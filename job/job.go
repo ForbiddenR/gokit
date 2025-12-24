@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type jobOnMessageFunc func(context.Context, interface{}) (isBreak bool, err error)
+type jobOnMessageFunc func(context.Context, any) (isBreak bool, err error)
 type jobOnTimeoutFunc func(context.Context) (isBreak bool, err error)
 
 var jobMaps sync.Map
@@ -39,8 +39,8 @@ type Job struct {
 
 // JobItem jobitem
 type JobItem struct {
-	CH          chan interface{}
-	ErrCH       chan interface{}
+	CH          chan any
+	ErrCH       chan any
 	Timeout     time.Duration
 	Func        jobOnMessageFunc
 	TimeoutFunc jobOnTimeoutFunc

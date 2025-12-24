@@ -128,7 +128,7 @@ func QRCode(hostname, clientID string, req *charger.QRCodeReq) (string, error) {
 	return resp.QRCode, nil
 }
 
-func handleRequestWithResponse(url, hostname string, req, resp interface{}) error {
+func handleRequestWithResponse(url, hostname string, req, resp any) error {
 	message, err := sendRequest(url, req, map[string]string{HostHeader: hostname})
 	if err != nil {
 		return err
@@ -141,7 +141,7 @@ func handleRequestWithResponse(url, hostname string, req, resp interface{}) erro
 	return nil
 }
 
-func handleRequest(url, hostname string, req interface{}) error {
+func handleRequest(url, hostname string, req any) error {
 	message, err := sendRequest(url, req, map[string]string{HostHeader: hostname})
 	if err != nil {
 		return err

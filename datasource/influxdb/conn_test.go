@@ -15,7 +15,7 @@ func TestWriteAPIBlocking(t *testing.T) {
 			"sn":                      "T1641735211",
 			"connector_serial_number": "1",
 			"transaction_id":          "212123124312",
-		}, map[string]interface{}{
+		}, map[string]any{
 			"start_electricity": 0.0,
 			"electricity":       10.1,
 			"power":             10.2,

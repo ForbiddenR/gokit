@@ -2,12 +2,13 @@ package mongo
 
 import (
 	"context"
+	"os"
+	"time"
+
 	"github.com/Kotodian/gokit/id"
 	jsoniter "github.com/json-iterator/go"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"os"
-	"time"
 )
 
 type MongoLogHook struct {
@@ -46,13 +47,13 @@ func (m *MongoLogHook) insertLogToMongo(data []byte) (err error) {
 	now := time.Now()
 
 	collection := db.Collection(m.collection + "-" + now.Format("0601"))
-	var object interface{}
+	var object any
 	if err = jsoniter.Unmarshal(data, &object); err != nil {
 		return
 	}
 
 	//转为map类型
-	dataMap := object.(map[string]interface{})
+	dataMap := object.(map[string]any)
 	host, _ := os.Hostname()
 	dataMap["_id"] = id.Next()
 	dataMap["host"] = host

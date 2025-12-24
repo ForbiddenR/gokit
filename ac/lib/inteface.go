@@ -20,7 +20,7 @@ type ClientInterface interface {
 	// ReadPump 从桩端读取消息
 	ReadPump()
 	// Reply 回复桩消息(将payload转换成协议消息发送)
-	Reply(ctx context.Context, payload interface{})
+	Reply(ctx context.Context, payload any)
 	// ReplyError 回复桩错误(将err转换成协议消息发送)
 	ReplyError(ctx context.Context, err error, desc ...string)
 	// Publish 发送消息到平台
@@ -69,9 +69,9 @@ type ClientInterface interface {
 	CertificateSN() string
 	MessageNumber() int16
 	SetMessageNumber(int16)
-	SetData(key, val interface{})
+	SetData(key, val any)
 	SetKeepalive(int64)
-	GetData(key interface{}) interface{}
+	GetData(key any) any
 	Conn() net.Conn
 	SetRemoteAddress(address string)
 	SetOrderInterval(int)
@@ -116,7 +116,7 @@ func (*testClient) ReadPump() {
 }
 
 // Reply 回复桩消息(将payload转换成协议消息发送)
-func (*testClient) Reply(ctx context.Context, payload interface{}) {
+func (*testClient) Reply(ctx context.Context, payload any) {
 
 }
 
@@ -243,7 +243,7 @@ func (t *testClient) SetMessageNumber(_ int16) {
 
 }
 
-func (t *testClient) SetData(key interface{}, val interface{}) {
+func (t *testClient) SetData(key any, val any) {
 
 }
 
@@ -251,7 +251,7 @@ func (t *testClient) SetKeepalive(_ int64) {
 
 }
 
-func (t *testClient) GetData(key interface{}) interface{} {
+func (t *testClient) GetData(key any) any {
 	return nil
 }
 
